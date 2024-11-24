@@ -6,16 +6,19 @@ import ChatComponent from './components/ChatComponent';
 import UsuariosComponent from './components/UsuariosComponent';
 import CargarPdfComponent from './components/CargarPdfComponent';
 
+
 const App = () => {
     return (
       <BrowserRouter>
-        <Navbar />
+
         <Routes>
           <Route path="/" element={<Inicio />} />
           <Route path="/chat" element={<ChatComponent />} />
           <Route path="/usuarios" element={<UsuariosComponent />} />
           <Route path="/cargar-pdf" element={<CargarPdfComponent />} />
         </Routes>
+
+        <Navbar />
       </BrowserRouter>
     );
   };

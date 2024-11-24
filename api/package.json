@@ -1,0 +1,13 @@
+{
+    "name": "teki-ia-api",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+      "start": "node index.js"
+    },
+    "dependencies": {
+      "express": "^4.21.1",
+      "http-proxy-middleware": "^2.0.4"
+    }
+  }
+  

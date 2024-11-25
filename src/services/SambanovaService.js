@@ -53,9 +53,22 @@ const sambanovaService = {
     try {
       const textoCuestionario = await readFileAsText(cuestionario);
       console.log("Texto del cuestionario:", textoCuestionario);
-      
+
+      const mensajes = [
+        {
+          role: 'system',
+          content: 'You are a helpful assistant',
+        },
+        {
+          role: 'user',
+          content: textoCuestionario,
+        },
+      ];
+
       const payload = {
-        text: textoCuestionario // Asegurarse de que el texto se envíe con la clave correcta
+        stream: true,
+        model: MODEL,
+        messages: mensajes,
       };
 
       console.log("Payload a enviar:", JSON.stringify(payload));
@@ -66,12 +79,12 @@ const sambanovaService = {
           'Content-Type': 'application/json',
         },
       });
-      // Respuesta procesada
+
       const respuestaTransformada = RespuestaTransformer.transformarRespuesta(respuesta);
       console.log("Respuesta transformada:", respuestaTransformada);
       return { message: respuestaTransformada };
     } catch (error) {
-      console.error("Error al enviar el cuestionario:", error.response || error.message || error);
+      console.error("Error al enviar el cuestionario", error);
       return { error: "Error al enviar el cuestionario" };
     }
   },

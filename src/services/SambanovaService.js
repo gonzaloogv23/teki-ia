@@ -64,23 +64,29 @@ const sambanovaService = {
         },
       ];
 
-      const respuesta = await axios.post(API_URL, {
-        stream: true,
-        model: MODEL,
-        messages: mensajes,
-      }, {
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      try {
+        const respuesta = await axios.post(API_URL, {
+          stream: true,
+          model: MODEL,
+          messages: mensajes,
+        }, {
+          headers: {
+            Authorization: `Bearer ${API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+        });
 
-      const respuestaTransformada = RespuestaTransformer.transformarRespuesta(respuesta);
-      console.log("respuesta transformada", respuestaTransformada);
-      return { message: respuestaTransformada };
+        const respuestaTransformada = RespuestaTransformer.transformarRespuesta(respuesta);
+        console.log("respuesta transformada", respuestaTransformada);
+        return { message: respuestaTransformada };
+      } catch (error) {
+        console.error("Error al enviar el cuestionario", error);
+        return { error: "Error al enviar el cuestionario" };
+      }
+
     } catch (error) {
-      console.error("Error al enviar el cuestionario", error);
-      return { error: "Error al enviar el cuestionario" };
+      console.error("Error al leer el archivo", error);
+      return { error: "Error al leer el archivo" };
     }
   },
 };

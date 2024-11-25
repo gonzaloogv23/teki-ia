@@ -1,8 +1,9 @@
 import axios from 'axios';
 import RespuestaTransformer from '../components/RespuestaTransformer';
 
-const API_URL = 'https://cheerful-daifuku-56516d.netlify.app/v1/chat/completions';
-const API_KEY = '768338a2-5014-491b-bdb4-bc9cc2b755fd';
+// Reemplaza "YOUR_VERCEL_APP_NAME" con el dominio de tu aplicación en Vercel
+const API_URL = 'https://api.sambanova.ai/v1/chat/completions';
+const API_KEY = 'c0e0bd6c-cc82-441a-9404-b0350b54a684';
 const MODEL = 'Meta-Llama-3.1-8B-Instruct';
 
 const sambanovaService = {

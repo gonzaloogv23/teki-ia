@@ -11,12 +11,12 @@ const ChatComponent = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const respuesta = await obtenerRespuesta(mensaje);
-      console.log("respuesta de la api:", respuesta)
+      const respuestaApi = await obtenerRespuesta(mensaje);
+      console.log("respuesta de la api:", respuestaApi);
   
-      if (respuesta) {
-        setRespuesta(respuesta);
-        setMensajes([...mensajes, { texto: mensaje, tipo: 'enviado' }, { texto: respuesta, tipo: 'recibido' }]);
+      if (respuestaApi) {
+        setRespuesta(respuestaApi);
+        setMensajes([...mensajes, { texto: mensaje, tipo: 'enviado' }, { texto: respuestaApi, tipo: 'recibido' }]);
       } else {
         setRespuesta("No se pudo obtener una respuesta adecuada.");
         setMensajes([...mensajes, { texto: mensaje, tipo: 'enviado' }, { texto: "No se pudo obtener una respuesta adecuada.", tipo: 'recibido' }]);
@@ -28,7 +28,6 @@ const ChatComponent = () => {
     }
     setMensaje('');
   };
-  
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -37,7 +36,6 @@ const ChatComponent = () => {
   };
 
   const efectoPigmalion = (mensaje) => {
-
     if (mensaje.includes('gracias') || mensaje.includes('agradecido')) {
       return 'Me alegra que estés agradecido! ';
     } else if (mensaje.includes('problema') || mensaje.includes('error')) {
@@ -48,7 +46,6 @@ const ChatComponent = () => {
   };
 
   const tipsRelacionarse = (mensaje) => {
-
     if (mensaje.includes('hola') || mensaje.includes('buenos días')) {
       return 'Recuerda que la primera impresión es importante. ¡Sonríe y sé amable! ';
     } else if (mensaje.includes('adiós') || mensaje.includes('hasta luego')) {
@@ -59,52 +56,58 @@ const ChatComponent = () => {
   };
 
   const agregarEmojis = (mensaje) => {
-    if (mensaje.includes('hola') || mensaje.includes('buenos días')) {
-      return mensaje + ' 😊👋💛';
-    } else if (mensaje.includes('gracias') || mensaje.includes('agradecido')) {
-      return mensaje + ' 🙏💕😊';
-    } else if (mensaje.includes('problema') || mensaje.includes('error')) {
-      return mensaje + ' 🤔😬🚫';
-    } else if (mensaje.includes('adiós') || mensaje.includes('hasta luego')) {
-      return mensaje + ' 👋🚪👍';
-    } else if (mensaje.includes('feliz') || mensaje.includes('alegre')) {
-      return mensaje + ' 😊🎉🎊';
-    } else if (mensaje.includes('triste') || mensaje.includes('sad')) {
-      return mensaje + ' 😔😢🤕';
-    } else if (mensaje.includes('enfadado') || mensaje.includes('enojado')) {
-      return mensaje + ' 😠😡🔥';
-    } else if (mensaje.includes('sorprendido') || mensaje.includes('asombrado')) {
-      return mensaje + ' 😮😲🤯';
-    } else if (mensaje.includes('amor') || mensaje.includes('amoroso')) {
-      return mensaje + ' ❤️💕😘';
-    } else if (mensaje.includes('cumpleaños') || mensaje.includes('feliz cumpleaños')) {
-      return mensaje + ' 🎂🎁🎉';
-    } else if (mensaje.includes('divertido') || mensaje.includes('entretenido')) {
-      return mensaje + ' 😄🎉👍';
-    } else if (mensaje.includes('aburrido') || mensaje.includes('desinteresado')) {
-      return mensaje + ' 😒😴👎';
-    } else if (mensaje.includes('emocionado') || mensaje.includes('entusiasmado')) {
-      return mensaje + ' 😆🎉🔥';
-    } else if (mensaje.includes('relajado') || mensaje.includes('tranquilo')) {
-      return mensaje + ' 😌🌟👌';
-    } else if (mensaje.includes('estresado') || mensaje.includes('ansioso')) {
-      return mensaje + ' 😩😬🕰️';
-    } else if (mensaje.includes('satisfecho') || mensaje.includes('contento')) {
-      return mensaje + ' 😊👌💯';
-    } else if (mensaje.includes('insatisfecho') || mensaje.includes('descontento')) {
-      return mensaje + ' 😐😒👎';
-    } else if (mensaje.includes('sorprendente') || mensaje.includes('increíble')) {
-      return mensaje + ' 😮🤯🔥';
-    } else if (mensaje.includes('normal') || mensaje.includes('común')) {
-      return mensaje + ' 😐👌🔴';
-    } else if (mensaje.includes('extraño') || mensaje.includes('raro')) {
-      return mensaje + ' 😕🤔🔮';
-    } else {
-      return mensaje + ' '; 
+    const emojis = {
+      'hola': ' 😊👋💛',
+      'buenos días': ' 😊👋💛',
+      'gracias': ' 🙏💕😊',
+      'agradecido': ' 🙏💕😊',
+      'problema': ' 🤔😬🚫',
+      'error': ' 🤔😬🚫',
+      'adiós': ' 👋🚪👍',
+      'hasta luego': ' 👋🚪👍',
+      'feliz': ' 😊🎉🎊',
+      'alegre': ' 😊🎉🎊',
+      'triste': ' 😔😢🤕',
+      'sad': ' 😔😢🤕',
+      'enfadado': ' 😠😡🔥',
+      'enojado': ' 😠😡🔥',
+      'sorprendido': ' 😮😲🤯',
+      'asombrado': ' 😮😲🤯',
+      'amor': ' ❤️💕😘',
+      'amoroso': ' ❤️💕😘',
+      'cumpleaños': ' 🎂🎁🎉',
+      'feliz cumpleaños': ' 🎂🎁🎉',
+      'divertido': ' 😄🎉👍',
+      'entretenido': ' 😄🎉👍',
+      'aburrido': ' 😒😴👎',
+      'desinteresado': ' 😒😴👎',
+      'emocionado': ' 😆🎉🔥',
+      'entusiasmado': ' 😆🎉🔥',
+      'relajado': ' 😌🌟👌',
+      'tranquilo': ' 😌🌟👌',
+      'estresado': ' 😩😬🕰️',
+      'ansioso': ' 😩😬🕰️',
+      'satisfecho': ' 😊👌💯',
+      'contento': ' 😊👌💯',
+      'insatisfecho': ' 😐😒👎',
+      'descontento': ' 😐😒👎',
+      'sorprendente': ' 😮🤯🔥',
+      'increíble': ' 😮🤯🔥',
+      'normal': ' 😐👌🔴',
+      'común': ' 😐👌🔴',
+      'extraño': ' 😕🤔🔮',
+      'raro': ' 😕🤔🔮'
+    };
+
+    const palabras = Object.keys(emojis);
+    for (const palabra of palabras) {
+      if (mensaje.includes(palabra)) {
+        return mensaje + emojis[palabra];
+      }
     }
+    return mensaje + ' ';
   };
-  
-  
+
   const obtenerRespuesta = async (mensaje) => {
     let textoEnviar = mensaje;
     if (primeraLlamada) {

@@ -44,6 +44,7 @@ const sambanovaService = {
     const reader = new FileReader();
     reader.onload = async () => {
       const textoCuestionario = reader.result;
+      console.log(textoCuestionario)
       const mensajes = [
         {
           role: 'system',

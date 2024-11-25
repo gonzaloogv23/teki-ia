@@ -7,7 +7,8 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLi
 
 const EnviarCuestionario = () => {
   const [cuestionario, setCuestionario] = useState(null);
-  const [respuesta, setRespuesta] = useState(null);
+  const [respuesta, setRespuesta] = useState('');
+  const [mensajes, setMensajes] = useState([]);
 
   const handleSeleccionarCuestionario = (e) => {
     setCuestionario(e.target.files[0]);
@@ -17,16 +18,20 @@ const EnviarCuestionario = () => {
   const handleEnviarCuestionario = async () => {
     if (cuestionario) {
       try {
-        const respuesta = await SambanovaService.enviarCuestionario(cuestionario);
-        if (respuesta.error) {
-          setRespuesta(respuesta.error);
+        const respuestaApi = await enviarCuestionario(cuestionario);
+        console.log("Respuesta de la API:", respuestaApi);
+
+        if (respuestaApi) {
+          setRespuesta(respuestaApi);
+          setMensajes([...mensajes, { texto: 'Cuestionario enviado', tipo: 'enviado' }, { texto: respuestaApi, tipo: 'recibido' }]);
         } else {
-          setRespuesta(respuesta.message); // Aquí estamos accediendo al mensaje de respuesta correctamente
-          console.log("Respuesta recibida: ", respuesta.message);
+          setRespuesta("No se pudo obtener una respuesta adecuada.");
+          setMensajes([...mensajes, { texto: 'Cuestionario enviado', tipo: 'enviado' }, { texto: "No se pudo obtener una respuesta adecuada.", tipo: 'recibido' }]);
         }
       } catch (error) {
         console.error("Error al enviar el cuestionario", error);
         setRespuesta("Error al enviar el cuestionario");
+        setMensajes([...mensajes, { texto: 'Cuestionario enviado', tipo: 'enviado' }, { texto: "Error al enviar el cuestionario", tipo: 'recibido' }]);
       }
     }
   };
@@ -54,11 +59,31 @@ const EnviarCuestionario = () => {
     return extractedText;
   };
 
+  const enviarCuestionario = async (cuestionario) => {
+    try {
+      const textoCuestionario = await extractTextFromPDF(cuestionario);
+      const respuesta = await SambanovaService.enviarCuestionario(textoCuestionario);
+      return respuesta.message;
+    } catch (error) {
+      console.error("Error al enviar el cuestionario", error);
+      return "Error al enviar el cuestionario";
+    }
+  };
+
   return (
     <div>
       <h2>Enviar Cuestionario</h2>
       <input type="file" onChange={handleSeleccionarCuestionario} />
       <button onClick={handleEnviarCuestionario}>Enviar cuestionario</button>
+      <div className="chat-window">
+        <ul className="message-list">
+          {mensajes.map((mensaje, index) => (
+            <li key={index} className={mensaje.tipo === 'enviado' ? 'mensaje-enviado' : 'mensaje-recibido'}>
+              {mensaje.texto}
+            </li>
+          ))}
+        </ul>
+      </div>
       {respuesta && <p>Respuesta: {respuesta}</p>}
     </div>
   );

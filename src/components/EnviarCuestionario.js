@@ -35,7 +35,7 @@ const EnviarCuestionario = () => {
     const arrayBuffer = await file.arrayBuffer();
 
     // Cargar el documento PDF
-    const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
 
     let extractedText = '';
 
@@ -50,9 +50,8 @@ const EnviarCuestionario = () => {
       const pageText = content.items.map(item => item.str).join(' ');
       extractedText += pageText + '\n'; // Añadir un salto de línea entre páginas
     }
-    console.log(extractedText)
+
     return extractedText;
-    
   };
 
   return (

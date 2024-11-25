@@ -41,10 +41,18 @@ const sambanovaService = {
   },
 
   async enviarCuestionario(cuestionario) {
-    const reader = new FileReader();
-    reader.onload = async () => {
-      const textoCuestionario = reader.result;
-      console.log(textoCuestionario)
+    const readFileAsText = (file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsText(file);
+      });
+    };
+
+    try {
+      const textoCuestionario = await readFileAsText(cuestionario);
+      console.log(textoCuestionario);
       const mensajes = [
         {
           role: 'system',
@@ -56,27 +64,24 @@ const sambanovaService = {
         },
       ];
 
-      try {
-        const respuesta = await axios.post(API_URL, {
-          stream: true,
-          model: MODEL,
-          messages: mensajes,
-        }, {
-          headers: {
-            Authorization: `Bearer ${API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-        });
+      const respuesta = await axios.post(API_URL, {
+        stream: true,
+        model: MODEL,
+        messages: mensajes,
+      }, {
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-        const respuestaTransformada = RespuestaTransformer.transformarRespuesta(respuesta);
-        console.log("respuesta transformada", respuestaTransformada);
-        return { message: respuestaTransformada };
-      } catch (error) {
-        console.error("Error al enviar el cuestionario", error);
-        return { error: "Error al enviar el cuestionario" };
-      }
-    };
-    reader.readAsText(cuestionario);
+      const respuestaTransformada = RespuestaTransformer.transformarRespuesta(respuesta);
+      console.log("respuesta transformada", respuestaTransformada);
+      return { message: respuestaTransformada };
+    } catch (error) {
+      console.error("Error al enviar el cuestionario", error);
+      return { error: "Error al enviar el cuestionario" };
+    }
   },
 };
 

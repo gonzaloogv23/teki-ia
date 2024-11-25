@@ -66,12 +66,12 @@ const sambanovaService = {
           'Content-Type': 'application/json',
         },
       });
-
+      // Respuesta procesada
       const respuestaTransformada = RespuestaTransformer.transformarRespuesta(respuesta);
       console.log("Respuesta transformada:", respuestaTransformada);
       return { message: respuestaTransformada };
     } catch (error) {
-      console.error("Error al enviar el cuestionario", error);
+      console.error("Error al enviar el cuestionario:", error.response || error.message || error);
       return { error: "Error al enviar el cuestionario" };
     }
   },

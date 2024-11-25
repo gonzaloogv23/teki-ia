@@ -22,7 +22,9 @@ exports.handler = async function (event) {
         return {
           statusCode: 400,
           body: JSON.stringify({ error: 'El cuerpo de la solicitud debe contener el texto a procesar.' }),
+          
         };
+        
       }
 
       // Formatear correctamente el payload para la API de SambaNova
@@ -72,7 +74,8 @@ exports.handler = async function (event) {
     }
 
   } catch (error) {
-    console.error('Error en la función del proxy:', error);
+    console.error('Error en la función del proxy:', error.response || error.message || error);
+
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Error al procesar la solicitud', details: error.message }),

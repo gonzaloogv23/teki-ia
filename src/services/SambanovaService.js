@@ -53,32 +53,34 @@ const sambanovaService = {
     try {
       const textoCuestionario = await readFileAsText(cuestionario);
       console.log("Texto del cuestionario:", textoCuestionario);
-      
-      const payload = {
-        text: textoCuestionario,
-      };
+      const mensajes = [
+        {
+          role: 'system',
+          content: 'You are a helpful assistant',
+        },
+        {
+          role: 'user',
+          content: textoCuestionario,
+        },
+      ];
 
-      console.log("Payload a enviar:", payload);
+      const respuesta = await axios.post(API_URL, {
+        stream: true,
+        model: MODEL,
+        messages: mensajes,
+      }, {
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-      try {
-        const respuesta = await axios.post(API_URL, payload, {
-          headers: {
-            Authorization: `Bearer ${API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        const respuestaTransformada = RespuestaTransformer.transformarRespuesta(respuesta);
-        console.log("Respuesta transformada:", respuestaTransformada);
-        return { message: respuestaTransformada };
-      } catch (error) {
-        console.error("Error al enviar el cuestionario", error);
-        return { error: "Error al enviar el cuestionario" };
-      }
-
+      const respuestaTransformada = RespuestaTransformer.transformarRespuesta(respuesta);
+      console.log("respuesta transformada", respuestaTransformada);
+      return { message: respuestaTransformada };
     } catch (error) {
-      console.error("Error al leer el archivo", error);
-      return { error: "Error al leer el archivo" };
+      console.error("Error al enviar el cuestionario", error);
+      return { error: "Error al enviar el cuestionario" };
     }
   },
 };

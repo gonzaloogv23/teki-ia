@@ -1,2 +1,7 @@
 [build]
   functions = "netlify/functions"
+
+[[redirects]]
+  from = "/enviar-correo"
+  to = "/.netlify/functions/enviarMail"
+  status = 200

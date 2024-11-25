@@ -81,15 +81,6 @@ const EnviarCuestionario = () => {
       <h2>Enviar Cuestionario</h2>
       <input type="file" onChange={handleSeleccionarCuestionario} />
       <button onClick={handleEnviarCuestionario}>Enviar cuestionario</button>
-      <div className="chat-window">
-        <ul className="message-list">
-          {mensajes.map((mensaje, index) => (
-            <li key={index} className={mensaje.tipo === 'enviado' ? 'mensaje-enviado' : 'mensaje-recibido'}>
-              {mensaje.texto}
-            </li>
-          ))}
-        </ul>
-      </div>
       {respuesta.length > 0 && (
         <div>
           {respuesta.map((linea, index) => (

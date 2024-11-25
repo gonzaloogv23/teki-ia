@@ -54,11 +54,11 @@ const UsuariosComponent = () => {
           agregarUsuario={agregarUsuario}
         />
         <CrearCuestionario />
-        {/*<EnviarCuestionario />*/}
+        <EnviarCuestionario />
         <button className="btn-toggle-lista" onClick={toggleLista}>
           {mostrarLista ? 'Esconder lista de alumnos' : 'Mostrar lista de alumnos'}
         </button>
-        <UsuariosList usuarios={usuarios} />
+        {mostrarLista && <UsuariosList usuarios={usuarios} />}
       </div>
     </div>
   );

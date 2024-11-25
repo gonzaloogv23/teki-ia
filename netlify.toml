@@ -1,2 +1,9 @@
 [build]
-  functions = "netlify/functions"
+  command = "npm run build"
+  publish = "build"
+
+[functions]
+  proxy = "proxy.js"
+
+[context]
+  environment = ["c0e0bd6c-cc82-441a-9404-b0350b54a684",]

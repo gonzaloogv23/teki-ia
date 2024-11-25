@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc } from 'firebase/firestore';
 import { storage, db } from '../firebaseConfig';
@@ -20,7 +21,8 @@ const CargarPdfComponent = () => {
     const pages = pdfDoc.getPages();
     let extractedText = '';
     for (const page of pages) {
-      extractedText += page.getTextContent().items.map(item => item.str).join(' ');
+      const textContent = await page.getTextContent();
+      extractedText += textContent.items.map(item => item.str).join(' ');
     }
     return extractedText;
   };
@@ -32,20 +34,31 @@ const CargarPdfComponent = () => {
       return;
     }
     setUploading(true);
+    console.log('Subiendo archivo a Firebase Storage...');
     const storageRef = ref(storage, `pdfs/${pdfFile.name}`);
     try {
       await uploadBytes(storageRef, pdfFile);
+      console.log('Archivo subido a Firebase Storage.');
+      
       const url = await getDownloadURL(storageRef);
       setDownloadURL(url);
+      console.log('URL de descarga obtenida:', url);
 
-      // Extract text from the uploaded PDF
       const extractedText = await extractTextFromPDF(pdfFile);
+      console.log('Texto extraído del PDF:', extractedText);
 
-      // Store the extracted text in Firestore
+      // Hacer una solicitud a la función de proxy en Netlify
+      const response = await axios.post('/.netlify/functions/proxy', {
+        text: extractedText
+      });
+      console.log('Respuesta de la función de proxy:', response.data);
+
+      // Verificar respuesta y almacenar en Firestore
       await addDoc(collection(db, 'conocimiento'), {
-        de_contenido: extractedText,
+        de_contenido: response.data,
         fe_timestamp: new Date()
       });
+      console.log('Texto almacenado en Firestore.');
 
       alert('Archivo PDF subido y procesado exitosamente.');
     } catch (error) {

@@ -28,8 +28,8 @@ exports.handler = async function (event) {
       // Formatear correctamente el payload para la API de SambaNova
       const payload = {
         prompt: body.text,
-        max_tokens: 150,  // Ajusta según tus necesidades
-        temperature: 0.7,  // Ajusta según tus necesidades
+        max_tokens: 5000,  // Ajusta según tus necesidades
+        temperature: 0.3,  // Ajusta según tus necesidades
       };
 
       const response = await axios.post(API_URL, payload, {

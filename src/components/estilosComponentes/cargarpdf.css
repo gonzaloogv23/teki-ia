@@ -18,6 +18,7 @@
   }
   
   .logo-circle {
+    margin-top: 3rem;
     width: 3.5rem;
     height: 3.5rem;
     display: flex;
@@ -25,7 +26,7 @@
     align-items: center;
     border-radius: 50%;
     background-color: #e9e5ff;
-    fill: rgb(97, 18, 136);
+    fill:  #5271FF;
   }
   
   .btn-close {
@@ -56,6 +57,7 @@
     font-family: "Mochiy Pop One", sans-serif;
     font-weight: 400;
     font-size: 18px;
+    color: #5271FF;
   }
   
   .modal-description {
@@ -89,7 +91,7 @@
     display: block;
     width: 2.25rem;
     height: 2.25rem;
-    fill: rgb(97, 18, 136);
+    fill:  #FBCB02;
   }
   
   .upload-area-title {
@@ -105,7 +107,7 @@
   }
   
   .upload-area-description strong {
-    color: rgb(97, 18, 136);
+    color:  #5271FF;
     font-weight: 700;
   }
   
@@ -131,14 +133,14 @@
   
   .btn-primary {
     color: #fff;
-    background-color: rgb(97, 18, 136);
-    border-color: rgb(97, 18, 136)2;
+    background-color:  #5271FF;
+    border-color:  #5271FF;
     cursor: pointer;
   }
 
 
 .modal-body img{
-    width: 150px;
+    width: 250px;
     height: auto;
     
 }

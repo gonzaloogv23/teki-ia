@@ -11,6 +11,7 @@ const UsuariosComponent = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [nombre, setNombre] = useState('');
   const [edad, setEdad] = useState('');
+  const [mostrarLista, setMostrarLista] = useState(false);
 
   const agregarUsuario = async (event) => {
     event.preventDefault();
@@ -38,6 +39,10 @@ const UsuariosComponent = () => {
     obtenerUsuarios();
   }, []);
 
+  const toggleLista = () => {
+    setMostrarLista(!mostrarLista);
+  };
+
   return (
     <div className="usuarios-component">
       <div className="usuarios-component-int">
@@ -49,7 +54,10 @@ const UsuariosComponent = () => {
           agregarUsuario={agregarUsuario}
         />
         <CrearCuestionario />
-        <EnviarCuestionario />
+        {/*<EnviarCuestionario />*/}
+        <button className="btn-toggle-lista" onClick={toggleLista}>
+          {mostrarLista ? 'Esconder lista de alumnos' : 'Mostrar lista de alumnos'}
+        </button>
         <UsuariosList usuarios={usuarios} />
       </div>
     </div>

@@ -6,10 +6,10 @@
 }
 
 .usuario-card {
-  width: fit-content; /* 45% del ancho disponible */
+  width: 80%; /* 45% del ancho disponible */
   height: fit-content;
   padding: 6px; /* Ajustar la altura de la tarjeta */
-  background: #FAF1F6;
+  background:  #5271FF;
   transition: box-shadow .3s ease, transform .2s ease;
   display: flex;
   flex-direction: column;
@@ -18,6 +18,11 @@
   box-sizing: border-box; /* Incluir padding y borde en las dimensiones */
 }
 
+.usuario-info{
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
 .usuario-avatar {
   background: radial-gradient(#A8A6B6,#B3B1BF,#BDBBC7,#C5C4CE,#E2E2E7);
   width: fit-content; /* Ajustar el ancho del avatar */
@@ -33,7 +38,7 @@
   padding-top: 5px;
   height: 50px; /* Ajustar la altura del svg */
   width: 70px; /* Ajustar el ancho del svg */
-  fill: #515F65;
+  fill: #FBCB02;
 }
 
 .usuario-title {
@@ -63,4 +68,92 @@
 
 .usuario-social-icon {
   font-size: 0.8em; /* Ajustar el tamaño de la fuente */
+}
+
+.cuestionario-container {
+  position: relative;
+  max-width: 500px;
+
+  background: #282828;
+  margin: 0 15px 15px;
+  padding: 10px 20px;
+  border-radius: 7px;
+}
+
+.cuestionario-container .cuestionario-skill-box {
+  width: 100%;
+  margin: 25px 0;
+}
+
+.cuestionario-skill-box .cuestionario-title {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(226, 226, 226);
+}
+
+.cuestionario-skill-box .cuestionario-skill-bar {
+  height: 8px;
+  width: 100%;
+  border-radius: 6px;
+  margin-top: 6px;
+  background: rgba(236, 236, 236, 0.1);
+}
+
+.cuestionario-skill-bar .cuestionario-skill-per {
+  position: relative;
+  display: block;
+  height: 100%;
+  width: 90%;
+  border-radius: 6px;
+  background: rgb(226, 226, 226);
+  animation: progress 0.4s ease-in-out forwards;
+  opacity: 0;
+}
+
+.cuestionario-skill-per.txt {
+  width: 70%;
+  animation-delay: 0.1s;
+}
+
+.cuestionario-skill-per.pdf {
+  width: 80%;
+  animation-delay: 0.1s;
+}
+
+@keyframes progress {
+  0% {
+    width: 0;
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.cuestionario-skill-per .cuestionario-tooltip {
+  position: absolute;
+  right: -14px;
+  top: -28px;
+  font-size: 9px;
+  font-weight: 500;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgb(226, 226, 226);
+  z-index: 1;
+}
+
+.cuestionario-tooltip::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  height: 10px;
+  width: 10px;
+  z-index: -1;
+  background-color: rgb(226, 226, 226);
+  transform: translateX(-50%) rotate(45deg);
 }

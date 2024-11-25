@@ -1,5 +1,5 @@
 .formulario-horizontal {
-    
+    margin-top: 3rem;
     height: auto;
     background: #F4F6FB;
     border: 1px solid white;
@@ -9,6 +9,7 @@
     padding: 25px;
     display: flex;
     flex-direction: column;
+    margin-bottom: 2rem;
 
   }
   
@@ -21,13 +22,13 @@
   
   .formulario-cabecera svg {
 
-    color: rgb(97, 18, 136);
+    color: #5271FF;
     margin-right: 5px;
   }
   
   .formulario-titulo {
     font-size: 21px;
-    color: rgb(97, 18, 136);
+    color: #5271FF;
   }
   
   .formulario-campo {
@@ -60,7 +61,7 @@
   
   .formulario-boton {
     margin-top: 1rem;
-    background-color: rgb(97, 18, 136);
+    background-color: #5271FF;
     font-size: 14px;
     padding: 7px 12px;
     height: auto;
@@ -70,6 +71,7 @@
   }
   
   .formulario-boton:hover {
-    background-color: #5f5f9c;
+    background-color: #2249f5;
+    cursor: pointer;
   }
   

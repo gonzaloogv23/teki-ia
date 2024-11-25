@@ -102,7 +102,7 @@ body {
     font-family: "Mochiy Pop One", sans-serif;
     font-weight: 400;
     font-style: normal;
-    color: rgb(97, 18, 136);
+    color: #5271FF;
     margin-bottom: 10px;
   }
   
@@ -111,7 +111,7 @@ body {
     margin: 20px 0 0 0;
     padding: 7px 20px;
     width: 100%;
-    background-color: rgb(223, 202, 106);
+    background-color: rgb(254, 226, 99);
     border: none;
     color: black;
     position: relative;
@@ -136,8 +136,8 @@ body {
     align-items: center;
     justify-content: center;
     position: absolute;
-    background: rgb(255, 215, 0);
-    background: linear-gradient(315deg, #c7dd1a, rgb(255, 215, 0));
+    background: rgb(255, 230, 86);
+    background: linear-gradient(315deg, #e2d954, rgb(255, 215, 0));
     width: 100%;
     height: 100%;
     top: 0;

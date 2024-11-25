@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import jsPDF from 'jspdf';
+import './estilosComponentes/crearcuestionario.css';
 
 const CrearCuestionario = () => {
   const [opcion, setOpcion] = useState('');
-  const [emailDestino, setEmailDestino] = useState('');
-  const [mostrarModal, setMostrarModal] = useState(false);
+
 
   const nota = 'Por favor, responda a cada pregunta con "Sí", "No" o "A veces".';
 
@@ -72,61 +71,42 @@ const CrearCuestionario = () => {
         pdf.text(`${key}. ${preguntas[key]} - ${respuestas[key]}`, 10, 30 + index * 10);
       });
       pdf.save(`Cuestionario_personalizado.pdf`);
-    } else if (opcion === 'email') {
-      setMostrarModal(true);
     }
   };
 
-  const handleEnviarCorreo = async () => {
-    const pdf = new jsPDF();
-    pdf.text('Cuestionario personalizado', 10, 10);
-    pdf.text(nota, 10, 20);
-    Object.keys(preguntas).forEach((key, index) => {
-      pdf.text(`${key}. ${preguntas[key]} - ${respuestas[key]}`, 10, 30 + index * 10);
-    });
 
-    const blob = pdf.output('blob');
-    const file = new File([blob], 'Cuestionario_personalizado.pdf', { type: 'application/pdf' });
-
-    const formData = new FormData();
-    formData.append('to', emailDestino);
-    formData.append('subject', 'Cuestionario personalizado');
-    formData.append('text', 'Adjunto encontrarás el cuestionario personalizado');
-    formData.append('attachment', file);
-    console.log("datos a enviar", formData);
-
-    try {
-      const response = await axios.post('https://cheerful-daifuku-56516d.netlify.app/.netlify/functions/enviar-correo', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
-
-    setMostrarModal(false);
-  };
 
   return (
     <div>
+   
+      <div className="cuestionario-radio">
       <h2>Cuestionario para personalizar tu aprendizaje</h2>
-      <select value={opcion} onChange={(e) => setOpcion(e.target.value)}>
-        <option value="">Seleccione una opción</option>
-        <option value="txt">Crear cuestionario en formato TXT</option>
-        <option value="pdf">Crear cuestionario en formato PDF</option>
-        <option value="email">Enviar cuestionario por correo electrónico</option>
-      </select>
-      <button onClick={handleCrearCuestionario}>Crear cuestionario</button>
+        <input
+          type="radio"
+          id="txt"
+          name="opcion"
+          value="txt"
+          label="Crear cuestionario en formato TXT 📝"
+          checked={opcion === 'txt'}
+          onChange={(e) => setOpcion(e.target.value)}
+        />
+        <input
+          type="radio"
+          id="pdf"
+          name="opcion"
+          value="pdf"
+          label="Crear cuestionario en formato PDF 📄"
+          checked={opcion === 'pdf'}
+          onChange={(e) => setOpcion(e.target.value)}
+        />
+       <button
+        className={`cuestionario-button ${opcion === 'txt' || opcion === 'pdf' ? 'cuestionario-button-checked' : ''}`}
+        onClick={handleCrearCuestionario}
+      >
+        Crear cuestionario
+      </button>
+      </div>
 
-      {mostrarModal && (
-        <div className="modal">
-          <h2>Ingrese el correo electrónico de destino</h2>
-          <input type="email" value={emailDestino} onChange={(e) => setEmailDestino(e.target.value)} />
-          <button onClick={handleEnviarCorreo}>Enviar correo electrónico</button>
-        </div>
-      )}
     </div>
   );
 };

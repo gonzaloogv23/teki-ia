@@ -7,8 +7,8 @@
   }
   
   .chat-header {
-    background-color: rgb(97, 18, 136);
-    color: #fff;
+    background-color: #5271FF;
+    color: #FBCB02;
     padding: 10px;
     font-family: "Mochiy Pop One", sans-serif;
     font-weight: 400;
@@ -64,8 +64,8 @@
   .send-button {
     border: none;
     outline: none;
-    background-color: rgb(97, 18, 136);
-    color: #fff;
+    background-color: #5271FF;
+    color: #FBCB02;
     font-size: 14px;
     padding: 5px 10px;
     cursor: pointer;

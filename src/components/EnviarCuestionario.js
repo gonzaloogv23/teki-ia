@@ -17,13 +17,12 @@ const EnviarCuestionario = () => {
   const handleEnviarCuestionario = async () => {
     if (cuestionario) {
       try {
-        const textoExtraido = await extractTextFromPDF(cuestionario);
-        console.log("21", textoExtraido)
-        const respuesta = await SambanovaService.enviarCuestionario(textoExtraido); // Asegúrate de enviar el texto extraído
+        const respuesta = await SambanovaService.enviarCuestionario(cuestionario);
         if (respuesta.error) {
           setRespuesta(respuesta.error);
         } else {
-          setRespuesta(respuesta.message); // Acceder al mensaje de la respuesta transformada
+          setRespuesta(respuesta.message); // Aquí estamos accediendo al mensaje de respuesta correctamente
+          console.log("Respuesta recibida: ", respuesta.message);
         }
       } catch (error) {
         console.error("Error al enviar el cuestionario", error);
@@ -36,7 +35,7 @@ const EnviarCuestionario = () => {
     const arrayBuffer = await file.arrayBuffer();
 
     // Cargar el documento PDF
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
 
     let extractedText = '';
 

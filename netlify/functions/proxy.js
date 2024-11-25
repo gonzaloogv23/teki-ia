@@ -1,5 +1,3 @@
-// netlify/functions/proxy.js
-
 const axios = require('axios');
 
 exports.handler = async function (event) {
@@ -19,7 +17,22 @@ exports.handler = async function (event) {
       const API_URL = 'https://api.sambanova.ai/v1/chat/completions';
       const API_KEY = process.env.API_KEY;
 
-      const response = await axios.post(API_URL, body, {
+      // Verificar que el cuerpo contiene el campo 'text'
+      if (!body.text) {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({ error: 'El cuerpo de la solicitud debe contener el texto a procesar.' }),
+        };
+      }
+
+      // Formatear correctamente el payload para la API de SambaNova
+      const payload = {
+        prompt: body.text,
+        max_tokens: 150,  // Ajusta según tus necesidades
+        temperature: 0.7,  // Ajusta según tus necesidades
+      };
+
+      const response = await axios.post(API_URL, payload, {
         headers: {
           Authorization: `Bearer ${API_KEY}`,
           'Content-Type': 'application/json',

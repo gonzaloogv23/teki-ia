@@ -18,6 +18,7 @@ const EnviarCuestionario = () => {
     if (cuestionario) {
       try {
         const textoExtraido = await extractTextFromPDF(cuestionario);
+      console.log("21", textoExtraido)
         const respuesta = await SambanovaService.enviarCuestionario(textoExtraido); // Asegúrate de enviar el texto extraído
         if (respuesta.error) {
           setRespuesta(respuesta.error);

@@ -1,5 +1,3 @@
-// netlify/functions/proxy.js
-
 const axios = require('axios');
 
 exports.handler = async function (event) {
@@ -8,7 +6,7 @@ exports.handler = async function (event) {
     if (event.httpMethod !== 'POST') {
       return {
         statusCode: 405,
-        body: 'Método no permitido'
+        body: 'Método no permitido',
       };
     }
 
@@ -28,11 +26,15 @@ exports.handler = async function (event) {
       statusCode: 200,
       body: JSON.stringify(response.data),
     };
-  } catch (error) {
-    console.error("Error en la función del proxy:", error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Error en el proxy', details: error.message }),
-    };
-  }
+    } catch (error) {
+      console.error('Error en la función del proxy:', error);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          error: 'Error en el proxy',
+          details: error.message,
+          stack: error.stack,
+        }),
+      };
+    }
 };

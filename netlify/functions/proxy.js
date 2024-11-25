@@ -1,25 +1,38 @@
-const express = require('express');
+// netlify/functions/proxy.js
+
 const axios = require('axios');
-const app = express();
-const PORT = 3001;
 
-app.use(express.json());
-
-app.post('/proxy', async (req, res) => {
+exports.handler = async function (event) {
   try {
-    const response = await axios.post('https://api.sambanova.ai/v1/chat/completions', req.body, {
+    // Solo permitir métodos POST
+    if (event.httpMethod !== 'POST') {
+      return {
+        statusCode: 405,
+        body: 'Método no permitido'
+      };
+    }
+
+    // Lee el cuerpo de la solicitud y los encabezados necesarios
+    const body = JSON.parse(event.body);
+    const API_URL = 'https://api.sambanova.ai/v1/chat/completions';
+    const API_KEY = process.env.API_KEY;
+
+    const response = await axios.post(API_URL, body, {
       headers: {
-        Authorization: `Bearer YOUR_API_KEY`,
+        Authorization: `Bearer ${API_KEY}`,
         'Content-Type': 'application/json',
       },
     });
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.json(response.data);
-  } catch (error) {
-    res.status(error.response.status).json({ message: 'Error en la solicitud a SambaNova' });
-  }
-});
 
-app.listen(PORT, () => {
-  console.log(`Proxy server running on http://localhost:${PORT}`);
-});
+    return {
+      statusCode: 200,
+      body: JSON.stringify(response.data),
+    };
+  } catch (error) {
+    console.error("Error en la función del proxy:", error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Error en el proxy', details: error.message }),
+    };
+  }
+};

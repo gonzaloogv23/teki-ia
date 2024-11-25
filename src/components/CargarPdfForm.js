@@ -30,7 +30,7 @@ const CargarPdfForm = ({
         <p className="modal-title">Entrena a Teki</p>
         <p className="modal-description">Sube tus archivos PDF para enseñar a Teki nuevos conocimientos y habilidades</p>
 
-        <button className="upload-area">
+        <button className="upload-area" onClick={() => document.querySelector('input[type="file"]').click()}>
           <span className="upload-area-icon">
             <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="35" height="35" viewBox="0 0 340.531 419.116">
               <g id="files-new" clipPath="url(#clip-files-new)">

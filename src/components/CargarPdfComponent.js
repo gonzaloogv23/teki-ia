@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '../firebaseConfig';
+import { collection, addDoc } from 'firebase/firestore';
+import { storage, db } from '../firebaseConfig';
 import CargarPdfForm from './CargarPdfForm';
+import { PDFDocument } from 'pdf-lib';
 
 const CargarPdfComponent = () => {
   const [pdfFile, setPdfFile] = useState(null);
@@ -10,6 +12,17 @@ const CargarPdfComponent = () => {
 
   const handlePdfChange = (event) => {
     setPdfFile(event.target.files[0]);
+  };
+
+  const extractTextFromPDF = async (file) => {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdfDoc = await PDFDocument.load(arrayBuffer);
+    const pages = pdfDoc.getPages();
+    let extractedText = '';
+    for (const page of pages) {
+      extractedText += page.getTextContent().items.map(item => item.str).join(' ');
+    }
+    return extractedText;
   };
 
   const enviarPdf = async (event) => {
@@ -24,10 +37,20 @@ const CargarPdfComponent = () => {
       await uploadBytes(storageRef, pdfFile);
       const url = await getDownloadURL(storageRef);
       setDownloadURL(url);
-      alert('Archivo PDF subido exitosamente.');
+
+      // Extract text from the uploaded PDF
+      const extractedText = await extractTextFromPDF(pdfFile);
+
+      // Store the extracted text in Firestore
+      await addDoc(collection(db, 'conocimiento'), {
+        de_contenido: extractedText,
+        fe_timestamp: new Date()
+      });
+
+      alert('Archivo PDF subido y procesado exitosamente.');
     } catch (error) {
-      console.error('Error al subir el archivo:', error);
-      alert('Hubo un error al subir el archivo. Inténtalo de nuevo.');
+      console.error('Error al subir y procesar el archivo:', error);
+      alert('Hubo un error al subir y procesar el archivo. Inténtalo de nuevo.');
     } finally {
       setUploading(false);
     }

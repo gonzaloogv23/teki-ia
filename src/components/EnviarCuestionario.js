@@ -84,7 +84,7 @@ const EnviarCuestionario = () => {
           ))}
         </ul>
       </div>
-      {respuesta && <p>Respuesta: {respuesta}</p>}
+      <p>Respuesta: {respuesta}</p>
     </div>
   );
 };

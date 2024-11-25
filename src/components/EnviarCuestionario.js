@@ -9,6 +9,7 @@ const EnviarCuestionario = () => {
   const [cuestionario, setCuestionario] = useState(null);
   const [respuesta, setRespuesta] = useState([]);
   const [mensajes, setMensajes] = useState([]);
+  const [textoEnviar, setTextoEnviar] = useState()
 
   const handleSeleccionarCuestionario = (e) => {
     setCuestionario(e.target.files[0]);

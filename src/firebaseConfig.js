@@ -7,12 +7,13 @@ import { getStorage } from 'firebase/storage'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDCOm9ml6_hTJiwamyW00gtTUAYd3jZsRo",
-  authDomain: "teki-ia.firebaseapp.com",
-  projectId: "teki-ia",
-  storageBucket: "teki-ia.firebasestorage.app",
-  messagingSenderId: "434071739510",
-  appId: "1:434071739510:web:f84ac70a1975f7e5ca5357"
+  apiKey: "AIzaSyDsn_XwDfxYjjoKGnVubGATJUu3tDtgVj0",
+  authDomain: "yocreciendo-87385.firebaseapp.com",
+  projectId: "yocreciendo-87385",
+  storageBucket: "yocreciendo-87385.appspot.com",
+  messagingSenderId: "141109326656",
+  appId: "1:141109326656:web:8273067fea64291f2540a5",
+  measurementId: "G-D0ZP502SYM"
 };
 
 // Initialize Firebase
@@ -20,4 +21,4 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-export { db, storage };
+export { db, storage , firebaseConfig};

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc } from 'firebase/firestore';
 import { storage, db } from '../firebaseConfig';
 import CargarPdfForm from './CargarPdfForm';
-import { PDFDocument } from 'pdf-lib';
+import * as pdfjsLib from 'pdfjs-dist/webpack'; // Asegúrate de importar desde webpack
+
+// Configurar el worker para pdf.js
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`;
 
 const CargarPdfComponent = () => {
   const [pdfFile, setPdfFile] = useState(null);
@@ -17,13 +19,24 @@ const CargarPdfComponent = () => {
 
   const extractTextFromPDF = async (file) => {
     const arrayBuffer = await file.arrayBuffer();
-    const pdfDoc = await PDFDocument.load(arrayBuffer);
-    const pages = pdfDoc.getPages();
+  
+    // Cargar el documento PDF
+    const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+  
     let extractedText = '';
-    for (const page of pages) {
-      const textContent = await page.getTextContent();
-      extractedText += textContent.items.map(item => item.str).join(' ');
+  
+    // Recorrer las páginas del PDF
+    for (let i = 0; i < pdf.numPages; i++) {
+      const page = await pdf.getPage(i + 1); // las páginas se indexan desde 1
+  
+      // Obtener el contenido de la página
+      const content = await page.getTextContent();
+  
+      // Extraer el texto de los items
+      const pageText = content.items.map(item => item.str).join(' ');
+      extractedText += pageText + '\n'; // Añadir un salto de línea entre páginas
     }
+  
     return extractedText;
   };
 
@@ -47,15 +60,9 @@ const CargarPdfComponent = () => {
       const extractedText = await extractTextFromPDF(pdfFile);
       console.log('Texto extraído del PDF:', extractedText);
 
-      // Hacer una solicitud a la función de proxy en Netlify
-      const response = await axios.post('/.netlify/functions/proxy', {
-        text: extractedText
-      });
-      console.log('Respuesta de la función de proxy:', response.data);
-
-      // Verificar respuesta y almacenar en Firestore
+      // Almacenar texto en Firestore
       await addDoc(collection(db, 'conocimiento'), {
-        de_contenido: response.data,
+        de_contenido: extractedText,
         fe_timestamp: new Date()
       });
       console.log('Texto almacenado en Firestore.');

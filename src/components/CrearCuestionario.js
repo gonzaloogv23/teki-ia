@@ -4,6 +4,8 @@ import jsPDF from 'jspdf';
 
 const CrearCuestionario = () => {
   const [opcion, setOpcion] = useState('');
+  const [emailDestino, setEmailDestino] = useState('');
+  const [mostrarModal, setMostrarModal] = useState(false);
 
   const nota = 'Por favor, responda a cada pregunta con "Sí", "No" o "A veces".';
 
@@ -60,65 +62,51 @@ const CrearCuestionario = () => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `Cuestionario_Neurodivergencias.txt`;
+      a.download = `Cuestionario_personalizado.txt`;
       a.click();
     } else if (opcion === 'pdf') {
       const pdf = new jsPDF();
-      pdf.text('Cuestionario de Neurodivergencias', 10, 10);
+      pdf.text('Cuestionario personalizado', 10, 10);
       pdf.text(nota, 10, 20);
       Object.keys(preguntas).forEach((key, index) => {
         pdf.text(`${key}. ${preguntas[key]} - ${respuestas[key]}`, 10, 30 + index * 10);
       });
-      pdf.save(`Cuestionario_Neurodivergencias.pdf`);
-    } else if (opcion === 'google') {
-      const form = {
-        'info': {
-          'title': 'Cuestionario de Neurodivergencias'
-        },
-        'items': [
-          {
-            'title': nota,
-            'type': 'TEXT'
-          },
-          ...Object.keys(preguntas).map((key) => ({
-            'title': preguntas[key],
-            'type': 'TEXT'
-          }))
-        ]
-      };
-      axios.post('https://forms.googleapis.com/v1/forms', form, {
-        headers: {
-          'Authorization': 'Bearer TU_TOKEN_DE_GOOGLE',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then((response) => {
-        const formId = response.data.formId;
-        const whatsappMessage = `¡Cuestionario creado! ${formId}`;
-        axios.post('https://graph.facebook.com/v13.0/messages', {
-          'messaging_product': 'whatsapp',
-          'to': 'TU_NÚMERO_DE_WHATSAPP',
-          'type': 'text',
-          'text': {
-            'body': whatsappMessage
-          }
-        }, {
-          headers: {
-            'Authorization': 'Bearer TU_TOKEN_DE_WHATSAPP',
-            'Content-Type': 'application/json'
-          }
-        })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      pdf.save(`Cuestionario_personalizado.pdf`);
+    } else if (opcion === 'email') {
+      setMostrarModal(true);
     }
+  };
+
+  const handleEnviarCorreo = async () => {
+    const pdf = new jsPDF();
+    pdf.text('Cuestionario personalizado', 10, 10);
+    pdf.text(nota, 10, 20);
+    Object.keys(preguntas).forEach((key, index) => {
+      pdf.text(`${key}. ${preguntas[key]} - ${respuestas[key]}`, 10, 30 + index * 10);
+    });
+
+    const blob = pdf.output('blob');
+    const file = new File([blob], 'Cuestionario_personalizado.pdf', { type: 'application/pdf' });
+
+    const formData = new FormData();
+    formData.append('to', emailDestino);
+    formData.append('subject', 'Cuestionario personalizado');
+    formData.append('text', 'Adjunto encontrarás el cuestionario personalizado');
+    formData.append('attachment', file);
+    console.log("datos a enviar", formData);
+
+    try {
+      const response = await axios.post('https://cheerful-daifuku-56516d.netlify.app/.netlify/functions/enviar-correo', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+
+    setMostrarModal(false);
   };
 
   return (
@@ -128,9 +116,17 @@ const CrearCuestionario = () => {
         <option value="">Seleccione una opción</option>
         <option value="txt">Crear cuestionario en formato TXT</option>
         <option value="pdf">Crear cuestionario en formato PDF</option>
-        <option value="google">Crear cuestionario en Google Forms y enviarlo por WhatsApp</option>
+        <option value="email">Enviar cuestionario por correo electrónico</option>
       </select>
       <button onClick={handleCrearCuestionario}>Crear cuestionario</button>
+
+      {mostrarModal && (
+        <div className="modal">
+          <h2>Ingrese el correo electrónico de destino</h2>
+          <input type="email" value={emailDestino} onChange={(e) => setEmailDestino(e.target.value)} />
+          <button onClick={handleEnviarCorreo}>Enviar correo electrónico</button>
+        </div>
+      )}
     </div>
   );
 };

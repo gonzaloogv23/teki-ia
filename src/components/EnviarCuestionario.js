@@ -63,7 +63,13 @@ const EnviarCuestionario = () => {
     try {
       const textoCuestionario = await extractTextFromPDF(cuestionario);
       const respuesta = await SambanovaService.enviarCuestionario(textoCuestionario);
-      return respuesta.message; // Asegúrate de que `respuesta` tenga el formato esperado
+      console.log("Respuesta transformada:", respuesta); // Verificación adicional
+
+      if (respuesta && respuesta.message) {
+        return respuesta.message; // Asegúrate de que `respuesta` tenga el formato esperado
+      } else {
+        throw new Error("Respuesta inválida");
+      }
     } catch (error) {
       console.error("Error al enviar el cuestionario", error);
       return "Error al enviar el cuestionario";
@@ -84,7 +90,7 @@ const EnviarCuestionario = () => {
           ))}
         </ul>
       </div>
-      <p>Respuesta: {respuesta}</p>
+      {respuesta && <p>Respuesta: {respuesta}</p>}
     </div>
   );
 };

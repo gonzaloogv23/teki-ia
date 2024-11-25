@@ -52,7 +52,7 @@ const sambanovaService = {
 
     try {
       const textoCuestionario = await readFileAsText(cuestionario);
-      console.log(textoCuestionario);
+      console.log("Texto del cuestionario:", textoCuestionario);
       const mensajes = [
         {
           role: 'system',
@@ -64,12 +64,19 @@ const sambanovaService = {
         },
       ];
 
+      const payload = {
+        stream: true,
+        model: MODEL,
+        messages: mensajes.map(message => ({
+          role: message.role,
+          content: message.content
+        })), // Asegurarse de que el contenido se pase correctamente
+      };
+
+      console.log("Payload a enviar:", JSON.stringify(payload)); // Verificar el payload
+
       try {
-        const respuesta = await axios.post(API_URL, {
-          stream: true,
-          model: MODEL,
-          messages: mensajes,
-        }, {
+        const respuesta = await axios.post(API_URL, payload, {
           headers: {
             Authorization: `Bearer ${API_KEY}`,
             'Content-Type': 'application/json',
@@ -77,7 +84,7 @@ const sambanovaService = {
         });
 
         const respuestaTransformada = RespuestaTransformer.transformarRespuesta(respuesta);
-        console.log("respuesta transformada", respuestaTransformada);
+        console.log("Respuesta transformada:", respuestaTransformada);
         return { message: respuestaTransformada };
       } catch (error) {
         console.error("Error al enviar el cuestionario", error);

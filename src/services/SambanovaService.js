@@ -36,24 +36,12 @@ const sambanovaService = {
       return respuestaTransformada;
     } catch (error) {
       console.error("Error al obtener la respuesta", error);
-      return "Error al obtener la respuesta";
+      return { message: "Error al obtener la respuesta" };
     }
   },
 
   async enviarCuestionario(cuestionario) {
-    const readFileAsText = (file) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsText(new Blob([file])); // Convertir a Blob si es necesario
-      });
-    };
-
     try {
-      const textoCuestionario = await readFileAsText(cuestionario);
-      console.log("Texto del cuestionario:", textoCuestionario);
-
       const mensajes = [
         {
           role: 'system',
@@ -61,7 +49,7 @@ const sambanovaService = {
         },
         {
           role: 'user',
-          content: textoCuestionario,
+          content: cuestionario,
         },
       ];
 
@@ -82,10 +70,10 @@ const sambanovaService = {
 
       const respuestaTransformada = RespuestaTransformer.transformarRespuesta(respuesta);
       console.log("Respuesta transformada:", respuestaTransformada);
-      return { message: respuestaTransformada };
+      return respuestaTransformada;
     } catch (error) {
       console.error("Error al enviar el cuestionario", error);
-      return { error: "Error al enviar el cuestionario" };
+      return { message: "Error al enviar el cuestionario" };
     }
   },
 };

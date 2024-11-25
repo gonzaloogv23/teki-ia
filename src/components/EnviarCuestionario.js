@@ -7,7 +7,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLi
 
 const EnviarCuestionario = () => {
   const [cuestionario, setCuestionario] = useState(null);
-  const [respuesta, setRespuesta] = useState('');
+  const [respuesta, setRespuesta] = useState([]);
   const [mensajes, setMensajes] = useState([]);
 
   const handleSeleccionarCuestionario = (e) => {
@@ -21,16 +21,16 @@ const EnviarCuestionario = () => {
         const respuestaApi = await enviarCuestionario(cuestionario);
         console.log("Respuesta de la API:", respuestaApi);
 
-        if (respuestaApi) {
-          setRespuesta(respuestaApi);
+        if (typeof respuestaApi === 'string') {
+          setRespuesta(respuestaApi.split('\n'));
           setMensajes([...mensajes, { texto: 'Cuestionario enviado', tipo: 'enviado' }, { texto: respuestaApi, tipo: 'recibido' }]);
         } else {
-          setRespuesta("No se pudo obtener una respuesta adecuada.");
+          setRespuesta(["No se pudo obtener una respuesta adecuada."]);
           setMensajes([...mensajes, { texto: 'Cuestionario enviado', tipo: 'enviado' }, { texto: "No se pudo obtener una respuesta adecuada.", tipo: 'recibido' }]);
         }
       } catch (error) {
         console.error("Error al enviar el cuestionario", error);
-        setRespuesta("Error al enviar el cuestionario");
+        setRespuesta(["Error al enviar el cuestionario"]);
         setMensajes([...mensajes, { texto: 'Cuestionario enviado', tipo: 'enviado' }, { texto: "Error al enviar el cuestionario", tipo: 'recibido' }]);
       }
     }
@@ -90,9 +90,9 @@ const EnviarCuestionario = () => {
           ))}
         </ul>
       </div>
-      {respuesta && (
+      {respuesta.length > 0 && (
         <div>
-          {respuesta.split('\n').map((linea, index) => (
+          {respuesta.map((linea, index) => (
             <p key={index}>{linea}</p>
           ))}
         </div>

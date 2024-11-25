@@ -9,7 +9,6 @@ const EnviarCuestionario = () => {
   const [cuestionario, setCuestionario] = useState(null);
   const [respuesta, setRespuesta] = useState([]);
   const [mensajes, setMensajes] = useState([]);
-  const [textoEnviar, setTextoEnviar] = useState()
 
   const handleSeleccionarCuestionario = (e) => {
     setCuestionario(e.target.files[0]);
@@ -63,19 +62,21 @@ const EnviarCuestionario = () => {
   const enviarCuestionario = async (cuestionario) => {
     try {
       const textoCuestionario = await extractTextFromPDF(cuestionario);
-      textoEnviar = `Que me podes evaluar de esto. ${textoCuestionario}`;
-      const respuesta = await SambanovaService.enviarCuestionario(textoEnviar);
-      console.log("Respuesta transformada:", respuesta); // Verificación adicional
-
-      if (respuesta && respuesta.message) {
-        return respuesta.message; // Asegúrate de que `respuesta` tenga el formato esperado
-      } else {
-        throw new Error("Respuesta inválida");
+      if (textoCuestionario) {
+        textoEnviar = `Que me podes evaluar de esto. ${textoCuestionario}`;
       }
-    } catch (error) {
-      console.error("Error al enviar el cuestionario", error);
-      return "Error al enviar el cuestionario";
-    }
+        const respuesta = await SambanovaService.enviarCuestionario(textoEnviar);
+        console.log("Respuesta transformada:", respuesta); // Verificación adicional
+
+        if (respuesta && respuesta.message) {
+          return respuesta.message; // Asegúrate de que `respuesta` tenga el formato esperado
+        } else {
+          throw new Error("Respuesta inválida");
+        }
+      } catch (error) {
+        console.error("Error al enviar el cuestionario", error);
+        return "Error al enviar el cuestionario";
+      }
   };
 
   return (

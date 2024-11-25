@@ -1,3 +1,5 @@
+// netlify/functions/proxy.js
+
 const axios = require('axios');
 
 exports.handler = async function (event) {
@@ -17,24 +19,7 @@ exports.handler = async function (event) {
       const API_URL = 'https://api.sambanova.ai/v1/chat/completions';
       const API_KEY = process.env.API_KEY;
 
-      // Verificar que el cuerpo contiene el campo 'text'
-      if (!body.text) {
-        return {
-          statusCode: 400,
-          body: JSON.stringify({ error: 'El cuerpo de la solicitud debe contener el texto a procesar.' }),
-          
-        };
-        
-      }
-
-      // Formatear correctamente el payload para la API de SambaNova
-      const payload = {
-        prompt: body.text,
-        max_tokens: 5000,  // Ajusta según tus necesidades
-        temperature: 0.3,  // Ajusta según tus necesidades
-      };
-
-      const response = await axios.post(API_URL, payload, {
+      const response = await axios.post(API_URL, body, {
         headers: {
           Authorization: `Bearer ${API_KEY}`,
           'Content-Type': 'application/json',
@@ -74,8 +59,7 @@ exports.handler = async function (event) {
     }
 
   } catch (error) {
-    console.error('Error en la función del proxy:', error.response || error.message || error);
-
+    console.error('Error en la función del proxy:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Error al procesar la solicitud', details: error.message }),

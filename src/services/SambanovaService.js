@@ -3,7 +3,7 @@ import RespuestaTransformer from '../components/RespuestaTransformer';
 
 // Reemplaza "YOUR_VERCEL_APP_NAME" con el dominio de tu aplicación en Netlify
 const API_URL = 'https://teki-ia.netlify.app/.netlify/functions/proxy';
-const API_KEY = 'c0e0bd6c-cc82-441a-9404-b0350b54a684';
+const API_KEY = 'e08b7f0c-6d8e-46f3-8442-4cb459cd82ca';
 const MODEL = 'Meta-Llama-3.1-8B-Instruct';
 
 const sambanovaService = {

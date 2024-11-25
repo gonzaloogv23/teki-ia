@@ -53,27 +53,12 @@ const sambanovaService = {
     try {
       const textoCuestionario = await readFileAsText(cuestionario);
       console.log("Texto del cuestionario:", textoCuestionario);
-      const mensajes = [
-        {
-          role: 'system',
-          content: 'You are a helpful assistant',
-        },
-        {
-          role: 'user',
-          content: textoCuestionario,
-        },
-      ];
-
+      
       const payload = {
-        stream: true,
-        model: MODEL,
-        messages: mensajes.map(message => ({
-          role: message.role,
-          content: message.content
-        })), // Asegurarse de que el contenido se pase correctamente
+        text: textoCuestionario,
       };
 
-      console.log("Payload a enviar:", JSON.stringify(payload)); // Verificar el payload
+      console.log("Payload a enviar:", payload);
 
       try {
         const respuesta = await axios.post(API_URL, payload, {

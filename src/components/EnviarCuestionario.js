@@ -90,7 +90,13 @@ const EnviarCuestionario = () => {
           ))}
         </ul>
       </div>
-      {respuesta && <p>Respuesta: {respuesta}</p>}
+      {respuesta && (
+        <div>
+          {respuesta.split('\n').map((linea, index) => (
+            <p key={index}>{linea}</p>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

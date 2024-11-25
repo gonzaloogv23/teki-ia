@@ -1,3 +1,5 @@
+// netlify/functions/proxy.js
+
 const axios = require('axios');
 
 exports.handler = async function (event) {
@@ -6,7 +8,7 @@ exports.handler = async function (event) {
     if (event.httpMethod !== 'POST' && event.httpMethod !== 'GET') {
       return {
         statusCode: 405,
-        body: 'Método no permitido',
+        body: 'Método no permitido'
       };
     }
 
@@ -15,17 +17,8 @@ exports.handler = async function (event) {
       // Lee el cuerpo de la solicitud y los encabezados necesarios
       const body = JSON.parse(event.body);
       const API_URL = 'https://api.sambanova.ai/v1/chat/completions';
-      const API_KEY = process.env.API_KEY; // Se espera que tengas tu clave API configurada en las variables de entorno de Netlify
+      const API_KEY = process.env.API_KEY;
 
-      // Si el cuerpo no tiene datos relevantes, responder con un error
-      if (!body || !body.text) {
-        return {
-          statusCode: 400,
-          body: JSON.stringify({ error: 'El cuerpo de la solicitud debe contener el texto a procesar.' }),
-        };
-      }
-
-      // Solicitud a la API de SambaNova
       const response = await axios.post(API_URL, body, {
         headers: {
           Authorization: `Bearer ${API_KEY}`,
@@ -33,30 +26,29 @@ exports.handler = async function (event) {
         },
       });
 
-      // Retornar los datos procesados desde SambaNova
       return {
         statusCode: 200,
         body: JSON.stringify(response.data),
       };
     }
 
-    // Si la solicitud es GET (para obtener un archivo desde Firebase Storage)
+    // Si la solicitud es GET (para Firebase Storage)
     if (event.httpMethod === 'GET') {
-      // Obtén la URL del archivo desde los parámetros de la consulta
+      // Obtén la URL del archivo desde la consulta
       const { fileUrl } = event.queryStringParameters;
       if (!fileUrl) {
         return {
           statusCode: 400,
-          body: JSON.stringify({ error: 'La URL del archivo es requerida' }),
+          body: JSON.stringify({ error: 'La URL del archivo es requerida' })
         };
       }
 
-      // Solicitar el archivo desde Firebase Storage
+      // Hacer la solicitud a Firebase Storage
       const response = await axios.get(fileUrl, {
         responseType: 'stream', // Usamos stream para manejar archivos grandes
       });
 
-      // Devuelve el archivo al frontend con el tipo de contenido correcto
+      // Devuelve el archivo al frontend
       return {
         statusCode: 200,
         headers: {
@@ -68,14 +60,9 @@ exports.handler = async function (event) {
 
   } catch (error) {
     console.error('Error en la función del proxy:', error);
-
-    // Manejo de errores con información adicional
     return {
       statusCode: 500,
-      body: JSON.stringify({
-        error: 'Error al procesar la solicitud',
-        details: error.message,
-      }),
+      body: JSON.stringify({ error: 'Error al procesar la solicitud', details: error.message }),
     };
   }
 };

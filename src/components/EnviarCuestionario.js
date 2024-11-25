@@ -5,6 +5,11 @@ const EnviarCuestionario = () => {
   const [cuestionario, setCuestionario] = useState(null);
   const [respuesta, setRespuesta] = useState(null);
 
+  const handleSeleccionarCuestionario = (e) => {
+    setCuestionario(e.target.files[0]);
+    console.log("cuestionario: ", cuestionario)
+  };
+
   const handleEnviarCuestionario = async () => {
     if (cuestionario) {
       try {
@@ -21,9 +26,6 @@ const EnviarCuestionario = () => {
     }
   };
   
-  const handleSeleccionarCuestionario = (e) => {
-    setCuestionario(e.target.files[0]);
-  };
 
   return (
     <div>

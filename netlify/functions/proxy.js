@@ -26,7 +26,11 @@ exports.handler = async function (event) {
       }
 
       // Solicitud a la API de SambaNova
-      const response = await axios.post(API_URL, body, {
+      const response = await axios.post(API_URL, {
+        prompt: body.text, // Asegúrate de usar el campo correcto según lo esperado por la API
+        max_tokens: 150,
+        temperature: 0.7
+      }, {
         headers: {
           Authorization: `Bearer ${API_KEY}`,
           'Content-Type': 'application/json',

@@ -62,7 +62,8 @@ const EnviarCuestionario = () => {
   const enviarCuestionario = async (cuestionario) => {
     try {
       const textoCuestionario = await extractTextFromPDF(cuestionario);
-      const respuesta = await SambanovaService.enviarCuestionario(textoCuestionario);
+      textoEnviar = `Que me podes evaluar de esto. ${textoCuestionario}`;
+      const respuesta = await SambanovaService.enviarCuestionario(textoEnviar);
       console.log("Respuesta transformada:", respuesta); // Verificación adicional
 
       if (respuesta && respuesta.message) {

@@ -46,7 +46,7 @@ const sambanovaService = {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result);
         reader.onerror = reject;
-        reader.readAsText(file);
+        reader.readAsText(new Blob([file])); // Convertir a Blob si es necesario
       });
     };
 

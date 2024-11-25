@@ -5,6 +5,7 @@ import AgregarUsuarioForm from './AgregarUsuarioForm';
 import UsuariosList from './UsuariosList';
 import CrearCuestionario from './CrearCuestionario';
 import './estilosComponentes/usuarioscomponentes.css';
+import EnviarCuestionario from './EnviarCuestionario';
 
 const UsuariosComponent = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -48,6 +49,7 @@ const UsuariosComponent = () => {
           agregarUsuario={agregarUsuario}
         />
         <CrearCuestionario />
+        <EnviarCuestionario />
         <UsuariosList usuarios={usuarios} />
       </div>
     </div>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import RespuestaTransformer from '../components/RespuestaTransformer';
 
-const API_URL = 'https://YOUR_VERCEL_APP_NAME.vercel.app/v1/chat/completions';
+const API_URL = 'https://teki-ia-sigma.vercel.app/v1/chat/completions';
 const API_KEY = '768338a2-5014-491b-bdb4-bc9cc2b755fd';
 const MODEL = 'Meta-Llama-3.1-8B-Instruct';
 
